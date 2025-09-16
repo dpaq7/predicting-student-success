@@ -21,7 +21,7 @@ def test_list_operations():
     assert my_list[-1] == 4
 
 
-@pytest.mark.parametrize("input_value,expected", [
+@pytest.mark.parametrize(("input_value", "expected"), [
     (1, 2),
     (2, 4),
     (3, 6),
