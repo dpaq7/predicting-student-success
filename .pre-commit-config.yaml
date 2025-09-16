@@ -32,6 +32,11 @@ repos:
     rev: v1.13.0
     hooks:
       - id: mypy
+        additional_dependencies: [
+          types-python-dateutil,
+          types-requests,
+          types-PyYAML,
+        ]
         args: [--config-file=.code_quality/mypy.ini]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
