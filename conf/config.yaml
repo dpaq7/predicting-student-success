@@ -1,0 +1,57 @@
+# Main configuration file for Predicting Student Success project
+# This file uses Hydra for configuration management
+
+# Project settings
+project:
+  name: "Predicting Student Success"
+  version: "0.1.0"
+  description: "Machine learning project for predicting student academic success"
+  seed: 42
+
+# Data configuration
+data:
+  raw_data_path: "data/01_raw"
+  processed_data_path: "data/03_primary"
+  features_path: "data/04_feature"
+  train_test_split: 0.2
+  validation_split: 0.2
+  
+# Model configuration
+model:
+  type: "random_forest"  # Options: random_forest, xgboost, logistic_regression, neural_network
+  hyperparameters:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 2
+    min_samples_leaf: 1
+    random_state: ${project.seed}
+    
+# Training configuration
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  early_stopping:
+    enabled: true
+    patience: 10
+    min_delta: 0.001
+  cross_validation:
+    enabled: true
+    n_folds: 5
+    
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  log_dir: "logs"
+  
+# Experiment tracking
+mlflow:
+  tracking_uri: "file:./mlruns"
+  experiment_name: "student_success_prediction"
+  
+# Output paths
+output:
+  models_dir: "models"
+  reports_dir: "data/08_reporting"
+  plots_dir: "data/08_reporting/plots"
