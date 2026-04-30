@@ -161,6 +161,11 @@ data/07_model_output/*
 data/08_reporting/*
 !data/**/README.md
 !data/**/.gitkeep
+!data/01_raw/student-mat.csv
+!data/01_raw/student-por.csv
+!data/03_primary/student_performance_combined.csv
+!data/08_reporting/
+!data/08_reporting/**
 
 # Notebooks - keep notebooks but not outputs
 notebooks/**/*.html
