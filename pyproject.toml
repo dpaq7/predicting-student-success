@@ -1,7 +1,7 @@
 [project]
 name = "predicting-student-success"
 version = "0.1.0"
-description = "A data science project for predicting student success"
+description = "Educational analytics capstone for early-warning student success prediction."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

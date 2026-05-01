@@ -4,11 +4,26 @@ Machine learning capstone project for **CIND820: Big Data Analytics Project** at
 
 This project investigates whether modern educational analytics methods can improve student performance prediction and support earlier, more explainable academic intervention. It extends the foundational student performance prediction work by Cortez and Silva (2008) using the UCI Student Performance Dataset.
 
-## Project Context
+## Recruiter Summary
+
+Predicting Student Success demonstrates a complete junior data science workflow: problem framing, public-data ingestion, temporal feature engineering, cross-validated classification and regression, model interpretation, clustering, report-ready artifacts, and honest limitations. The project is especially relevant to education analytics, responsible ML, and stakeholder-facing data storytelling roles.
+
+## Problem
 
 Educational institutions often identify struggling students after poor grades have already accumulated. At that point, the intervention window is smaller and academic confidence may already be damaged. This project studies whether machine learning can identify at-risk students earlier, explain the strongest risk factors, and suggest differentiated intervention strategies.
 
 The project is framed as an academic analytics workflow rather than a production student-risk system. The emphasis is on reproducible analysis, model comparison, interpretation, and ethical discussion.
+
+## Technical Stack
+
+- Python
+- pandas and NumPy
+- scikit-learn
+- matplotlib and seaborn
+- pytest and ruff
+- uv package management
+- GitHub Actions
+- Markdown reporting artifacts
 
 ## Research Questions
 
@@ -125,7 +140,7 @@ Interpretation:
 └── README.md
 ```
 
-## Reproducing the Analysis
+## Reproducible Quickstart
 
 ### Prerequisites
 
@@ -159,6 +174,23 @@ Primary generated outputs:
 - `data/08_reporting/tables/permutation_importance.csv`
 - `data/08_reporting/tables/cluster_profiles.csv`
 - `data/08_reporting/figures/*.png`
+
+## Screenshots and Report Links
+
+The repository includes generated figures and report drafts rather than application screenshots.
+
+Report and artifact links:
+
+- [Analysis summary](data/08_reporting/analysis_summary.md)
+- [Milestone 3 initial results draft](docs/milestone3_initial_results.md)
+- [Final report results draft](docs/final_report_results_draft.md)
+- [Final presentation outline](docs/final_presentation_outline.md)
+- [Resume alignment](docs/resume_alignment.md)
+- [Report figures](data/08_reporting/figures)
+  - `classification_accuracy_temporal.png`
+  - `regression_rmse_temporal.png`
+  - `top_permutation_importance.png`
+  - `cluster_pass_rates.png`
 
 ## Report and Presentation Drafts
 

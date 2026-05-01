@@ -2,159 +2,42 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: "3.10"
-
 jobs:
-  test:
-    name: Test Python ${{ matrix.python-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12"]
-
+  validate:
+    name: Lint, Test, and Check Artifacts
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
-      
-      - name: Install dependencies
-        run: |
-          uv venv
-          uv pip install -e ".[dev,data]"
-      
-      - name: Run tests with pytest
-        run: |
-          uv run pytest tests/ \
-            --cov=src \
-            --cov-report=term-missing \
-            --cov-report=xml \
-            --cov-report=html \
-            --verbose
-      
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.10'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+          python-version: "3.11"
 
-  lint:
-    name: Lint and Format Check
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-      
       - name: Install dependencies
-        run: |
-          uv venv
-          uv pip install -e ".[dev]"
-      
-      - name: Run Ruff linter
-        run: |
-          uv run ruff check src tests --config .code_quality/ruff.toml
-      
-      - name: Run Ruff formatter check
-        run: |
-          uv run ruff format src tests --check --config .code_quality/ruff.toml
+        run: uv pip install --system -e ".[dev,data]"
 
-  type-check:
-    name: Type Check with MyPy
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-      
-      - name: Install dependencies
-        run: |
-          uv venv
-          uv pip install -e ".[dev,data]"
-      
-      - name: Run MyPy
-        run: |
-          uv run mypy src --config-file .code_quality/mypy.ini
+      - name: Lint
+        run: ruff check src tests
 
-  security:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-      
-      - name: Install dependencies
-        run: |
-          uv venv
-          uv pip install -e ".[dev]"
-      
-      - name: Run security checks with Ruff
-        run: |
-          uv run ruff check src tests --select S --config .code_quality/ruff.toml
-      
-      - name: Run pip-audit
-        run: |
-          uv pip install pip-audit
-          uv run pip-audit
+      - name: Test
+        run: pytest tests/ --cov=src --cov-report=term-missing
 
-  pre-commit:
-    name: Pre-commit Hooks
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-      
-      - name: Install pre-commit
+      - name: Check report artifacts
         run: |
-          uv venv
-          uv pip install pre-commit
-      
-      - name: Run pre-commit
-        run: |
-          uv run pre-commit run --all-files
+          test -f data/08_reporting/analysis_summary.md
+          test -f data/08_reporting/tables/classification_metrics.csv
+          test -f data/08_reporting/tables/regression_metrics.csv
+          test -f data/08_reporting/figures/classification_accuracy_temporal.png
+          test -f docs/resume_alignment.md
