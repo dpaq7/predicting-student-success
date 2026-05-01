@@ -4,7 +4,7 @@
 
 **Project:** Predicting Student Performance for Early Intervention  
 **Student:** Dan Paquin  
-**Student Number:** 501284328  
+**Student Number:** *********  
 **Supervisor:** Dr. Babaoglu  
 **Course:** CIND820 Big Data Analytics Project  
 
